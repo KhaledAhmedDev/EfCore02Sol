@@ -15,11 +15,12 @@ namespace EfCore01.Models
 
         public DateTime CreationDate { get; set; }
 
+        
         public int Serial { get; set; }
 
         #region Manage Relatioship [Employee-Department] [one:one][P:T]
        // [InverseProperty(nameof(Employee.ManagedDepartment))]
-       public Employee? Manager { get; set; } = null!;
+       public virtual Employee? Manager { get; set; } = null!;
 
        // [ForeignKey(nameof(Manager))]
         public int? DeptManagerId { get; set; }
@@ -36,9 +37,8 @@ namespace EfCore01.Models
         #region Department has employees work on [1:m]  [M is mandatory]
 
 
-        public ICollection<Employee> Employees { get; set; } = null!;
+        public virtual ICollection<Employee> Employees { get; set; } = null!;
 
-        public string? Test { get; set; }
 
         #endregion
     }

@@ -12,7 +12,7 @@ namespace EfCore01.Models
 
         public string? PName { get; set; }
 
-        public ICollection<EmployeeProject> ProjectEmployees { get; set; } = new HashSet<EmployeeProject>();
+        public virtual ICollection<EmployeeProject> ProjectEmployees { get; set; } = new HashSet<EmployeeProject>();
 
     }
 }

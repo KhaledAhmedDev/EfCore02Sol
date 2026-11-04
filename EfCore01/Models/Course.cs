@@ -13,7 +13,7 @@ namespace EfCore01.Models
         public string? CName { get; set; }
 
         //public ICollection<Student> Students { get; set; } = new HashSet<Student>();
-        public ICollection<StudentCourse> CourseStudents { get; set; }= new HashSet<StudentCourse>();
+        public virtual ICollection<StudentCourse> CourseStudents { get; set; }= new HashSet<StudentCourse>();
        
     }
 }

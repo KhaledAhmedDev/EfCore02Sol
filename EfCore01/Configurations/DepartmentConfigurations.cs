@@ -60,11 +60,22 @@ namespace EfCore01.Configurations
             //Call GetDate()
             //If Update Happens ,It will recalculate value Again
 
+            builder.Ignore(D => D.Serial);
+
             builder
                 .HasMany(D => D.Employees)
                 .WithOne(E => E.WorkingDepartment)
                 .HasForeignKey(E => E.DepartmentWorkingId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasData(
+                new Department() { DeptId = 30, DeptName = "Sales" }
+            , new Department() { DeptId = 40, DeptName = "Marketing" }
+            , new Department() { DeptId = 50, DeptName = "Finance" });
+
+
+
+
         }
     }
 }

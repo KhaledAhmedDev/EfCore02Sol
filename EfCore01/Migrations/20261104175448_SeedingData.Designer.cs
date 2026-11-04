@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfCore01.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20261102194526_test")]
-    partial class test
+    [Migration("20261104175448_SeedingData")]
+    partial class SeedingData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,12 +64,6 @@ namespace EfCore01.Migrations
                         .HasColumnType("varchar")
                         .HasColumnName("DepartmentName");
 
-                    b.Property<int>("Serial")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Test")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("DeptId");
 
                     b.HasIndex("DeptManagerId")
@@ -77,6 +71,26 @@ namespace EfCore01.Migrations
                         .HasFilter("[DeptManagerId] IS NOT NULL");
 
                     b.ToTable("DepartmentsTable", "Sales");
+
+                    b.HasData(
+                        new
+                        {
+                            DeptId = 30,
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeptName = "Sales"
+                        },
+                        new
+                        {
+                            DeptId = 40,
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeptName = "Marketing"
+                        },
+                        new
+                        {
+                            DeptId = 50,
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeptName = "Finance"
+                        });
                 });
 
             modelBuilder.Entity("EfCore01.Models.Employee", b =>
@@ -86,6 +100,9 @@ namespace EfCore01.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpId"), 10L, 10);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
@@ -112,6 +129,9 @@ namespace EfCore01.Migrations
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");

@@ -14,6 +14,6 @@ namespace EfCore01.Models
 
         //public ICollection<Course> Courses { get; set; } = new HashSet<Course>();
 
-        public ICollection<StudentCourse> StudentCourses { get; set; } = new HashSet<StudentCourse>();
+        public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new HashSet<StudentCourse>();
     }
 }

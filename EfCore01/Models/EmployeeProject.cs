@@ -13,9 +13,9 @@ namespace EfCore01.Models
         //[ForeignKey(nameof(EmployeeWorksOnProject))]
         //[Key]
         public int EmpId { get; set; }
-        public Employee EmployeeWorksOnProject { get; set; } = null!;
+        public virtual Employee EmployeeWorksOnProject { get; set; } = null!;
 
-        public Project ProjectWorksOnEmployee { get; set; } = null!;
+        public virtual Project ProjectWorksOnEmployee { get; set; } = null!;
 
        // [ForeignKey(nameof(ProjectWorksOnEmployee))]
         public int ProjectId { get; set; }

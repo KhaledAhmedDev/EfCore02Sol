@@ -2,6 +2,7 @@
 using EfCore01.Configurations;
 using EfCore01.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,9 @@ namespace EfCore01.Contexts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=CompanyDB02;Trusted_Connection=true;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Server=.;Database=CompanyDB;Trusted_Connection=true;TrustServerCertificate=true")
+                .UseLazyLoadingProxies();
+       
                 
             
         }
