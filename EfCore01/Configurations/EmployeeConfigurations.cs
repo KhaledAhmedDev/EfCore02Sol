@@ -122,6 +122,11 @@ namespace EfCore01.Configurations
             });
 
 
+            //builder.HasOne(E => E.Supervisor)
+            //    .WithMany()
+            //    .HasForeignKey(E => E.SupervisorId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

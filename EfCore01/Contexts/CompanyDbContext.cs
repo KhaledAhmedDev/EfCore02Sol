@@ -20,6 +20,7 @@ namespace EfCore01.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=.;Database=CompanyDB02;Trusted_Connection=true;TrustServerCertificate=true");
+                
             
         }
 
@@ -76,10 +77,10 @@ namespace EfCore01.Contexts
             //    .HasDefaultValueSql("GETDATE()"); 
             #endregion
 
-            modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
-            modelBuilder.ApplyConfiguration(new DepartmentConfigurations());
+            //modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
+            //modelBuilder.ApplyConfiguration(new DepartmentConfigurations());
 
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             #region Non Clean Way
             //modelBuilder.Entity<Department>()
             //    .ToTable("DepartmentsTable", "Sales");
@@ -133,6 +134,9 @@ namespace EfCore01.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
 
     }
 }

@@ -53,6 +53,19 @@ namespace EfCore01.Models
 
         #endregion
 
+        #region Employee may work on Project and Project Contains Many Employees [1:M] [M is optional]
+
+        public EmployeeProject? ProjectEmployeeWorksOn { get; set; }
+        #endregion
+
+        #region Suopervisor manage many Employees [1:M]
+
+        public int? SupervisorId { get; set; }
+        public Employee? Supervisor { get; set; }
+
+
+       
+        #endregion
 
     }
 }

@@ -23,6 +23,22 @@ namespace EfCore01.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EfCore01.Models.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
             modelBuilder.Entity("EfCore01.Models.Department", b =>
                 {
                     b.Property<int>("DeptId")
@@ -36,7 +52,7 @@ namespace EfCore01.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("DeptManagerId")
+                    b.Property<int?>("DeptManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("DeptName")
@@ -48,10 +64,14 @@ namespace EfCore01.Migrations
                     b.Property<int>("Serial")
                         .HasColumnType("int");
 
+                    b.Property<string>("Test")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("DeptId");
 
                     b.HasIndex("DeptManagerId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeptManagerId] IS NOT NULL");
 
                     b.ToTable("DepartmentsTable", "Sales");
                 });
@@ -90,6 +110,9 @@ namespace EfCore01.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
                     b.ComplexProperty<Dictionary<string, object>>("EmpAddress", "EfCore01.Models.Employee.EmpAddress#Address", b1 =>
                         {
                             b1.IsRequired();
@@ -111,10 +134,27 @@ namespace EfCore01.Migrations
 
                     b.HasIndex("DepartmentWorkingId");
 
+                    b.HasIndex("SupervisorId");
+
                     b.ToTable("EmployeesTable", null, t =>
                         {
                             t.HasCheckConstraint("CheckAgeConstraint", "Email like '%@%.%'");
                         });
+                });
+
+            modelBuilder.Entity("EfCore01.Models.EmployeeProject", b =>
+                {
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmpId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("EmployeeProject");
                 });
 
             modelBuilder.Entity("EfCore01.Models.Product", b =>
@@ -139,13 +179,62 @@ namespace EfCore01.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("EfCore01.Models.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Project");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.StudentCourse", b =>
+                {
+                    b.Property<int>("CrsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StdId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.HasKey("CrsId", "StdId");
+
+                    b.HasIndex("StdId");
+
+                    b.ToTable("StudentCourse");
+                });
+
             modelBuilder.Entity("EfCore01.Models.Department", b =>
                 {
                     b.HasOne("EfCore01.Models.Employee", "Manager")
                         .WithOne("ManagedDepartment")
                         .HasForeignKey("EfCore01.Models.Department", "DeptManagerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Manager");
                 });
@@ -158,7 +247,56 @@ namespace EfCore01.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EfCore01.Models.Employee", "Supervisor")
+                        .WithMany()
+                        .HasForeignKey("SupervisorId");
+
+                    b.Navigation("Supervisor");
+
                     b.Navigation("WorkingDepartment");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.EmployeeProject", b =>
+                {
+                    b.HasOne("EfCore01.Models.Employee", "EmployeeWorksOnProject")
+                        .WithOne("ProjectEmployeeWorksOn")
+                        .HasForeignKey("EfCore01.Models.EmployeeProject", "EmpId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EfCore01.Models.Project", "ProjectWorksOnEmployee")
+                        .WithMany("ProjectEmployees")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmployeeWorksOnProject");
+
+                    b.Navigation("ProjectWorksOnEmployee");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.StudentCourse", b =>
+                {
+                    b.HasOne("EfCore01.Models.Course", "Course")
+                        .WithMany("CourseStudents")
+                        .HasForeignKey("CrsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EfCore01.Models.Student", "Student")
+                        .WithMany("StudentCourses")
+                        .HasForeignKey("StdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.Course", b =>
+                {
+                    b.Navigation("CourseStudents");
                 });
 
             modelBuilder.Entity("EfCore01.Models.Department", b =>
@@ -169,6 +307,18 @@ namespace EfCore01.Migrations
             modelBuilder.Entity("EfCore01.Models.Employee", b =>
                 {
                     b.Navigation("ManagedDepartment");
+
+                    b.Navigation("ProjectEmployeeWorksOn");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.Project", b =>
+                {
+                    b.Navigation("ProjectEmployees");
+                });
+
+            modelBuilder.Entity("EfCore01.Models.Student", b =>
+                {
+                    b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
         }

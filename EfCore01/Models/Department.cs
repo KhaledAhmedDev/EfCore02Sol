@@ -19,10 +19,10 @@ namespace EfCore01.Models
 
         #region Manage Relatioship [Employee-Department] [one:one][P:T]
        // [InverseProperty(nameof(Employee.ManagedDepartment))]
-       public Employee Manager { get; set; } = null!;
+       public Employee? Manager { get; set; } = null!;
 
        // [ForeignKey(nameof(Manager))]
-        public int DeptManagerId { get; set; }
+        public int? DeptManagerId { get; set; }
 
         //Navigation +Id==>ManagerId
         //Navigation+Pk of principal table=> ManagerEmpId
@@ -37,6 +37,8 @@ namespace EfCore01.Models
 
 
         public ICollection<Employee> Employees { get; set; } = null!;
+
+        public string? Test { get; set; }
 
         #endregion
     }
